@@ -2252,18 +2252,34 @@ func (gp *GoPdf) addObj(iobj IObj) int {
 	return index
 }
 
+func (gp *GoPdf) newContent() (content *ContentObj) {
+	content = new(ContentObj)
+	content.init(func() *GoPdf {
+		return gp
+	})
+	return
+}
+
 func (gp *GoPdf) getContent() *ContentObj {
 	var content *ContentObj
 	if gp.indexOfContent <= -1 {
-		content = new(ContentObj)
-		content.init(func() *GoPdf {
-			return gp
-		})
+		// content = new(ContentObj)
+		content = gp.newContent()
+		// content.init(func() *GoPdf {
+		// 	return gp
+		// })
 		gp.indexOfContent = gp.addObj(content)
 		gp.ConObj[gp.curPageIndex] = content
 	} else {
 		// content = gp.pdfObjs[gp.indexOfContent].(*ContentObj)
-		content = gp.ConObj[gp.curPageIndex]
+		if _, ok := gp.ConObj[gp.curPageIndex]; ok {
+			content = gp.ConObj[gp.curPageIndex]
+		} else {
+			content = gp.newContent()
+			gp.indexOfContent = gp.addObj(content)
+			gp.ConObj[gp.curPageIndex] = content
+		}
+		// content = gp.ConObj[gp.curPageIndex]
 	}
 	return content
 }
