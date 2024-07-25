@@ -45,6 +45,8 @@ type GoPdf struct {
 	margins Margins
 
 	pdfObjs []IObj
+	PageObj map[int]*PageObj
+	ConObj  map[int]*ContentObj
 	config  Config
 	anchors map[string]anchorOption
 
@@ -53,6 +55,7 @@ type GoPdf struct {
 	/*---index ของ obj สำคัญๆ เก็บเพื่อลด loop ตอนค้นหา---*/
 	//index ของ obj pages
 	indexOfPagesObj int
+	curPageIndex    int
 
 	//number of pages
 	numOfPagesObj int
@@ -838,6 +841,8 @@ func (gp *GoPdf) AddPageWithOption(opt PageOption) {
 
 	page.ResourcesRelate = strconv.Itoa(gp.indexOfProcSet+1) + " 0 R"
 	index := gp.addObj(page)
+	gp.curPageIndex = len(gp.PageObj)
+	gp.PageObj[len(gp.PageObj)] = page
 	if gp.indexOfFirstPageObj == -1 {
 		gp.indexOfFirstPageObj = index
 	}
@@ -2016,6 +2021,8 @@ func (gp *GoPdf) Rectangle(x0 float64, y0 float64, x1 float64, y1 float64, style
 // init
 func (gp *GoPdf) init(importer ...*gofpdi.Importer) {
 	gp.pdfObjs = []IObj{}
+	gp.PageObj = make(map[int]*PageObj)
+	gp.ConObj = make(map[int]*ContentObj)
 	gp.buf = bytes.Buffer{}
 	gp.indexEncodingObjFonts = []int{}
 	gp.pdfProtection = nil
@@ -2240,6 +2247,7 @@ func (gp *GoPdf) formatXrefline(n int64) string {
 
 func (gp *GoPdf) addObj(iobj IObj) int {
 	index := len(gp.pdfObjs)
+	// log.Println(fmt.Sprintf(`add obj: %T`, iobj), index)
 	gp.pdfObjs = append(gp.pdfObjs, iobj)
 	return index
 }
@@ -2252,8 +2260,10 @@ func (gp *GoPdf) getContent() *ContentObj {
 			return gp
 		})
 		gp.indexOfContent = gp.addObj(content)
+		gp.ConObj[gp.curPageIndex] = content
 	} else {
-		content = gp.pdfObjs[gp.indexOfContent].(*ContentObj)
+		// content = gp.pdfObjs[gp.indexOfContent].(*ContentObj)
+		content = gp.ConObj[gp.curPageIndex]
 	}
 	return content
 }
@@ -2361,20 +2371,12 @@ func (gp *GoPdf) IsCurrFontContainGlyph(r rune) (bool, error) {
 }
 
 func (gp *GoPdf) SetCurPage(pageNum int) {
-	gp.curr.IndexOfPageObj = pageNum
+
+	gp.curPageIndex = pageNum
 
 	//reset
-	gp.indexOfContent = -1
+	// gp.indexOfContent = gp.ConObj[gp.curPageIndex]
 	gp.resetCurrXY()
-	if gp.headerFunc != nil {
-		gp.headerFunc()
-		gp.resetCurrXY()
-	}
-
-	if gp.footerFunc != nil {
-		gp.footerFunc()
-		gp.resetCurrXY()
-	}
 }
 
 //tool for validate pdf https://www.pdf-online.com/osa/validate.aspx
