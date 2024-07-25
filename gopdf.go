@@ -2360,4 +2360,21 @@ func (gp *GoPdf) IsCurrFontContainGlyph(r rune) (bool, error) {
 	return true, nil
 }
 
+func (gp *GoPdf) SetCurPage(pageNum int) {
+	gp.curr.IndexOfPageObj = pageNum
+
+	//reset
+	gp.indexOfContent = -1
+	gp.resetCurrXY()
+	if gp.headerFunc != nil {
+		gp.headerFunc()
+		gp.resetCurrXY()
+	}
+
+	if gp.footerFunc != nil {
+		gp.footerFunc()
+		gp.resetCurrXY()
+	}
+}
+
 //tool for validate pdf https://www.pdf-online.com/osa/validate.aspx
