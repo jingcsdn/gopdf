@@ -742,6 +742,23 @@ func (gp *GoPdf) Image(picPath string, x float64, y float64, rect *Rect) error {
 	return gp.imageByHolder(imgh, imageOptions)
 }
 
+func (gp *GoPdf) ImageFormStream(pic []byte, x float64, y float64, rect *Rect) error {
+	gp.UnitsToPointsVar(&x, &y)
+	rect = rect.UnitsToPoints(gp.config.Unit)
+	imgh, err := ImageHolderByBytes(pic)
+	if err != nil {
+		return err
+	}
+
+	imageOptions := ImageOptions{
+		X:    x,
+		Y:    y,
+		Rect: rect,
+	}
+
+	return gp.imageByHolder(imgh, imageOptions)
+}
+
 func (gp *GoPdf) ImageFrom(img image.Image, x float64, y float64, rect *Rect) error {
 	return gp.ImageFromWithOption(img, ImageFromOption{
 		Format: "png",
