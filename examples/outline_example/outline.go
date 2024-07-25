@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/signintech/gopdf"
+	"github.com/jingcsdn/gopdf"
 )
 
 func GetFont(pdf *gopdf.GoPdf, fontPath string) (err error) {

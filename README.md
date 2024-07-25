@@ -16,7 +16,7 @@ A minimum version of Go 1.13 is required.
 ## Installation
 
 ```
-go get -u github.com/signintech/gopdf
+go get -u github.com/jingcsdn/gopdf
 ```
 
 ### Print text
@@ -26,7 +26,7 @@ go get -u github.com/signintech/gopdf
 package main
 import (
 	"log"
-	"github.com/signintech/gopdf"
+	"github.com/jingcsdn/gopdf"
 )
 
 func main() {
@@ -73,7 +73,7 @@ pdf.Cell(nil, "Hello")
 package main
 import (
 	"log"
-	"github.com/signintech/gopdf"
+	"github.com/jingcsdn/gopdf"
 )
 
 func main() {
@@ -108,7 +108,7 @@ package main
 
 import (
 	"log"
-	"github.com/signintech/gopdf"
+	"github.com/jingcsdn/gopdf"
 )
 
 func main()  {
@@ -153,7 +153,7 @@ package main
 
 import (
     "log"
-    "github.com/signintech/gopdf"
+    "github.com/jingcsdn/gopdf"
 )
 
 func main() {
@@ -274,7 +274,7 @@ package main
 import (
 	"log"
 
-	"github.com/signintech/gopdf"
+	"github.com/jingcsdn/gopdf"
 )
 
 
@@ -306,7 +306,7 @@ Import existing PDF power by package [gofpdi](https://github.com/phpdave11/gofpd
 package main
 
 import (
-        "github.com/signintech/gopdf"
+        "github.com/jingcsdn/gopdf"
         "io"
         "net/http"
         "os"
@@ -393,7 +393,7 @@ package main
 import (
 	"log"
 
-	"github.com/signintech/gopdf"
+	"github.com/jingcsdn/gopdf"
 )
 
 func main() {
