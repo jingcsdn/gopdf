@@ -19,7 +19,7 @@ A minimum version of Go 1.13 is required.
 go get -u github.com/jingcsdn/gopdf
 ```
 
-### Print text
+### Print text to then specified page
 
 ```go
 
@@ -58,9 +58,9 @@ func main() {
     //add set current page index 0, modify page 0 content
     pdf.SetCurPage(0)
     pdf.SetXY(10.00, 10.00)
-	pdf.Text(`您好`)
+    pdf.Text(`您好`)
 
-	pdf.WritePdf("hello.pdf")
+    pdf.WritePdf("hello.pdf")
 
 }
 
